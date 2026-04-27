@@ -168,6 +168,31 @@ func CmdRm(idStr string) {
 		return
 	}
 
+	if idStr == "-a" {
+		newTasks := make([]Task, 0)
+		deletedCount := 0
+		for _, t := range tasks {
+			if t.IsCompleted {
+				deletedCount++
+			} else {
+				newTasks = append(newTasks, t)
+			}
+		}
+
+		if deletedCount == 0 {
+			fmt.Println("当前没有已完成的待办事项可以删除。")
+			return
+		}
+
+		if err := SaveTasks(newTasks); err != nil {
+			fmt.Println("保存待办事项失败:", err)
+			return
+		}
+
+		fmt.Printf("成功删除了 %d 个已完成的待办事项。\n", deletedCount)
+		return
+	}
+
 	var id int
 	if idStr == "" {
 		// 打印所有列表供用户参考

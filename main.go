@@ -14,6 +14,7 @@ func printHelp() {
 	fmt.Println("  td list -a, ls -a  - 列出所有待办 (包含已完成)")
 	fmt.Println("  td do, d [id]      - 完成待办 (不加 ID 将进入交互式选择)")
 	fmt.Println("  td rm [id]         - 删除待办 (不加 ID 将进入交互式选择)")
+	fmt.Println("  td rm -a           - 删除所有已完成的待办事项")
 	fmt.Println("  td help, h         - 显示此帮助信息")
 }
 
