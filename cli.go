@@ -43,8 +43,8 @@ func CmdAdd(content string) {
 	fmt.Printf("成功添加待办: [%d] %s\n", task.ID, task.Content)
 }
 
-// CmdList 列出所有待办事项
-func CmdList() {
+// CmdList 列出待办事项
+func CmdList(showAll bool) {
 	tasks, err := LoadTasks()
 	if err != nil {
 		fmt.Println("加载待办事项失败:", err)
@@ -56,12 +56,21 @@ func CmdList() {
 		return
 	}
 
+	count := 0
 	for _, t := range tasks {
+		if !showAll && t.IsCompleted {
+			continue
+		}
+		count++
 		status := " "
 		if t.IsCompleted {
 			status = "x"
 		}
 		fmt.Printf("[%s] %d. %s\n", status, t.ID, t.Content)
+	}
+
+	if count == 0 && !showAll {
+		fmt.Println("当前没有任何未完成的待办事项。使用 'td ls -a' 查看所有事项。")
 	}
 }
 
@@ -162,7 +171,7 @@ func CmdRm(idStr string) {
 	var id int
 	if idStr == "" {
 		// 打印所有列表供用户参考
-		CmdList()
+		CmdList(true)
 		id = getTaskIDFromInput("请输入要删除的待办 ID: ")
 		if id == -1 {
 			fmt.Println("无效的 ID。")

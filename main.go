@@ -10,7 +10,8 @@ func printHelp() {
 	fmt.Println("个人待办 CLI 工具 (td)")
 	fmt.Println("用法:")
 	fmt.Println("  td add, a <内容>   - 添加新待办")
-	fmt.Println("  td list, ls        - 列出所有待办")
+	fmt.Println("  td list, ls        - 列出未完成待办")
+	fmt.Println("  td list -a, ls -a  - 列出所有待办 (包含已完成)")
 	fmt.Println("  td do, d [id]      - 完成待办 (不加 ID 将进入交互式选择)")
 	fmt.Println("  td rm [id]         - 删除待办 (不加 ID 将进入交互式选择)")
 	fmt.Println("  td help, h         - 显示此帮助信息")
@@ -29,7 +30,11 @@ func main() {
 		content := strings.Join(os.Args[2:], " ")
 		CmdAdd(content)
 	case "list", "ls":
-		CmdList()
+		showAll := false
+		if len(os.Args) > 2 && os.Args[2] == "-a" {
+			showAll = true
+		}
+		CmdList(showAll)
 	case "do", "d":
 		idStr := ""
 		if len(os.Args) > 2 {
